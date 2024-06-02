@@ -46,9 +46,14 @@ namespace PermDynamics.Pages
         private void CreateNewValue(object sender, EventArgs e)
         {
             Random random = new Random();
+
             double value = mainWindow.pointsInfo[mainWindow.pointsInfo.Count - 1].value;
             double newValue = value * (random.NextDouble() + 0.5d);
             mainWindow.pointsInfo.Add(new Classes.PointInfo(newValue));
+
+            double newValueSecond = mainWindow.pointsInfoSecond[mainWindow.pointsInfoSecond.Count - 1].value * (random.NextDouble() + 0.5d);
+            mainWindow.pointsInfoSecond.Add(new Classes.PointInfo(newValueSecond));
+
             ControlCreateChart();
         }
 
@@ -62,37 +67,67 @@ namespace PermDynamics.Pages
         public void CreateChart()
         {
             canvas.Children.Clear();
-            for (int i = 0; i < mainWindow.pointsInfo.Count; i++) 
+            for (int i = 0; i < mainWindow.pointsInfo.Count; i++)
                 if (mainWindow.pointsInfo[i].value > maxValue)
                     maxValue = mainWindow.pointsInfo[i].value;
-            
+
             for (int i = 0; i < mainWindow.pointsInfo.Count; i++)
             {
                 Line line = new Line();
                 line.X1 = i * 20;
                 line.X2 = (i + 1) * 20;
                 if (i == 0)
-                    line.Y1 = actualHeightCanvas;
+                    line.Y1 = actualHeightCanvas - (mainWindow.pointsInfo[i].value / maxValue * actualHeightCanvas);
                 else
-                    line.Y1 = actualHeightCanvas - ((mainWindow.pointsInfo[(i - 1)].value / maxValue) * actualHeightCanvas);
-                line.Y2 = actualHeightCanvas - ((mainWindow.pointsInfo[i].value / maxValue) * actualHeightCanvas);
+                    line.Y1 = actualHeightCanvas - (mainWindow.pointsInfo[i - 1].value / maxValue * actualHeightCanvas);
+                line.Y2 = actualHeightCanvas - (mainWindow.pointsInfo[i].value / maxValue * actualHeightCanvas);
                 line.StrokeThickness = 2;
                 mainWindow.pointsInfo[i].line = line;
                 canvas.Children.Add(line);
+
+                if (i < mainWindow.pointsInfoSecond.Count)
+                {
+                    Line lineSecond = new Line();
+                    lineSecond.X1 = i * 20;
+                    lineSecond.X2 = (i + 1) * 20;
+                    if (i == 0)
+                        lineSecond.Y1 = actualHeightCanvas - (mainWindow.pointsInfoSecond[i].value / maxValue * actualHeightCanvas);
+                    else
+                        lineSecond.Y1 = actualHeightCanvas - (mainWindow.pointsInfoSecond[i - 1].value / maxValue * actualHeightCanvas);
+                    lineSecond.Y2 = actualHeightCanvas - (mainWindow.pointsInfoSecond[i].value / maxValue * actualHeightCanvas);
+                    lineSecond.StrokeThickness = 2;
+                    lineSecond.Stroke = Brushes.Blue; 
+                    mainWindow.pointsInfoSecond[i].line = lineSecond;
+                    canvas.Children.Add(lineSecond);
+                }
             }
         }
 
         public void CreatePoint()
         {
             Line line = new Line();
-            line.X1 = (mainWindow.pointsInfo.Count - 1) * 20;
-            line.X2 = mainWindow.pointsInfo.Count * 20;
-            line.Y1 = actualHeightCanvas - ((mainWindow.pointsInfo[(mainWindow.pointsInfo.Count - 2)].value / maxValue) * actualHeightCanvas);
-            line.Y2 = actualHeightCanvas - ((mainWindow.pointsInfo[(mainWindow.pointsInfo.Count - 1)].value / maxValue) * actualHeightCanvas);
+            line.X1 = (mainWindow.pointsInfo.Count - 2) * 20;
+            line.X2 = (mainWindow.pointsInfo.Count - 1) * 20;
+            line.Y1 = actualHeightCanvas - (mainWindow.pointsInfo[mainWindow.pointsInfo.Count - 2].value / maxValue * actualHeightCanvas);
+            line.Y2 = actualHeightCanvas - (mainWindow.pointsInfo[mainWindow.pointsInfo.Count - 1].value / maxValue * actualHeightCanvas);
             line.StrokeThickness = 2;
-            mainWindow.pointsInfo[(mainWindow.pointsInfo.Count - 1)].line = line;
+            mainWindow.pointsInfo[mainWindow.pointsInfo.Count - 1].line = line;
             canvas.Children.Add(line);
+
+            if (mainWindow.pointsInfoSecond.Count > 1)
+            {
+                Line lineSecond = new Line();
+                lineSecond.X1 = (mainWindow.pointsInfoSecond.Count - 2) * 20;
+                lineSecond.X2 = (mainWindow.pointsInfoSecond.Count - 1) * 20;
+                lineSecond.Y1 = actualHeightCanvas - (mainWindow.pointsInfoSecond[mainWindow.pointsInfoSecond.Count - 2].value / maxValue * actualHeightCanvas);
+                lineSecond.Y2 = actualHeightCanvas - (mainWindow.pointsInfoSecond[mainWindow.pointsInfoSecond.Count - 1].value / maxValue * actualHeightCanvas);
+                lineSecond.StrokeThickness = 2;
+                lineSecond.Stroke = Brushes.Blue;
+                mainWindow.pointsInfoSecond[mainWindow.pointsInfoSecond.Count - 1].line = lineSecond;
+                canvas.Children.Add(lineSecond);
+            }
         }
+
         public void ControlCreateChart()
         {
             double value = mainWindow.pointsInfo[mainWindow.pointsInfo.Count - 1].value;
@@ -107,12 +142,13 @@ namespace PermDynamics.Pages
         public void ColorChart()
         {
             double value = mainWindow.pointsInfo[mainWindow.pointsInfo.Count - 1].value;
+            averageValue = 0;
             for (int i = 0; i < mainWindow.pointsInfo.Count; i++)
                 averageValue += mainWindow.pointsInfo[i].value;
             averageValue /= mainWindow.pointsInfo.Count;
 
             for (int i = 0; i < mainWindow.pointsInfo.Count; i++)
-                if (value < averageValue)
+                if (mainWindow.pointsInfo[i].value < averageValue)
                     mainWindow.pointsInfo[i].line.Stroke = Brushes.Red;
                 else
                     mainWindow.pointsInfo[i].line.Stroke = Brushes.Green;
