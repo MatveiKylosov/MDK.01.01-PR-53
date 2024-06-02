@@ -20,10 +20,25 @@ namespace PermDynamics
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<Classes.PointInfo> pointInfo = new List<Classes.PointInfo>();
+        public List<Classes.PointInfo> pointsInfo = new List<Classes.PointInfo>();
+
+        public enum pages{
+            main,
+            chart
+        }
+
+        public void OpenPages(pages _pages)
+        {
+            if (_pages == pages.main)
+                frame.Navigate(new Pages.Main(this));
+            else if(_pages == pages.chart)
+                frame.Navigate(new Pages.Chart(this));
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            OpenPages(pages.main);
         }
     }
 }
