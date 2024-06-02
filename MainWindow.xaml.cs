@@ -20,6 +20,7 @@ namespace PermDynamics
     /// </summary>
     public partial class MainWindow : Window
     {
+        public List<Classes.PointInfo> pointInfo = new List<Classes.PointInfo>();
         public MainWindow()
         {
             InitializeComponent();
