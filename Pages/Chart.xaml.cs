@@ -24,5 +24,10 @@ namespace PermDynamics.Pages
         {
             InitializeComponent();
         }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
     }
 }
