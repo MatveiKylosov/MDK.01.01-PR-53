@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PermDynamics"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800">
+        Title="MainWindow" Height="450" Width="800" MinHeight="500" MinWidth="900">
     <Grid>
         <Frame x:Name="frame" NavigationUIVisibility="Hidden" Margin="0,0,0,60"/>
         <Button Content="Экспорт" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="300" Margin="10" Click="Button_Click"/>
