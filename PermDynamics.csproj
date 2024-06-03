@@ -168,5 +168,8 @@
   <ItemGroup>
     <Resource Include="Images\chart.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="SQL\sql.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
